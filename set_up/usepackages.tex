@@ -17,14 +17,14 @@
 				dvips]
 				{geometry}
 \else
-	\usepackage[paper = a4paper,         %To be shrunk to 80% when printed		%% Linn Ø: A4? Not A5? 
-				twoside,                 %Two-side mode, switches margins on 
+	\usepackage[paper = a4paper,         %To be shrunk to 80% when printed		%% Linn Ø: A4? Not A5?
+				twoside,                 %Two-side mode, switches margins on
 				bindingoffset = 2mm,     %Offset for binding side of page
 				hmargin = 25mm,          %Left and right margin
 				vmargin = 25mm,          %Top and bottom margin
 				dvipdfm]
 				{geometry}
-\fi	
+\fi
 % Font settings
 %
 \usepackage{xcolor}
@@ -56,17 +56,17 @@
 %\usepackage[dvipsnames]{color}   % named colors
 \usepackage[procnames]{listings} % beautiful listings
 %%%%%% \usepackage{units}				 % semantically represent numbers with units
-\usepackage{pdfpages}			 % include one page of a pdf or a whole document	%%% Added by Linn Ødegaard 18th January 2016     
+\usepackage{pdfpages}			 % include one page of a pdf or a whole document	%%% Added by Linn Ødegaard 18th January 2016
 \usepackage{wrapfig}			% ADDED BY LINN 02.05.2016
 \usepackage{rotating} % Rotating table ADDED BY LINN 03.06.2016
 
 \usepackage{soul}
 
-\renewcommand{\arraystretch}{1.7} 
+\renewcommand{\arraystretch}{1.7}
 %
 % The hyperref package allows advanced hyperlinking functionality
 %
-%\usepackage[dvipdfmx,        % Use dvipdf driver 		%%%%%% Linn Ødegaard 18th January 2016 - removed dvipdfmx 
+%\usepackage[dvipdfmx,        % Use dvipdf driver 		%%%%%% Linn Ødegaard 18th January 2016 - removed dvipdfmx
 %			backref,         % List citing occurences in the References
 %			colorlinks,      % Colored links
 %			citecolor=blue,  % Color of cite links
@@ -83,7 +83,7 @@
 \newcommand{\aref}[1]{\autoref{#1}} % Enable links
 %
 % Set fancy page header using fancyhdr package
-% 
+%
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 % Ensure that the chapter and section headings are in lowercase
@@ -108,3 +108,6 @@
 % (useful if you have very long chapter names)
 %
 %\headheight 30pt
+
+
+\usepackage{kantlipsum} % Dummy text
