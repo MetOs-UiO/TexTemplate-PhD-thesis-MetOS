@@ -30,5 +30,18 @@ in your shell. Follow the instructions on screen.
 - A short summary taken from the tex log files is shown on screen, counting the occurance of box under and overflows and missing references.
 - There is also an option to compress the file for pdf-a usage.
 
+``` shell
+./make compress
+```
+
+- You can clean up the directory for latex compilation files
+``` shell
+./make clean
+```
+
+Possible comandline options:
+ "open" "clean" "check" "pic" "compress" "copy" "review"
+ 
+ 
 ## Contribution
 Suggestions for any improvements and pull requests are highly welcomed!
