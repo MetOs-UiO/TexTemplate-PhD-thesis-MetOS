@@ -1,8 +1,8 @@
 #!/bin/bash
 # Script to compile latex documents which has to be seperated in one main document and dependend sections in different files.
-# Figures are expected in a directory figures_src.
-# Original graphics in vector formates will be converted into pdf and moved to figures directory.
-# Graphics in pdf or bitmap formats will be linked into a directory figures.
+# Figures are expected in a directory pictures_src.
+# Original graphics in vector formates will be converted into pdf and moved to pictures directory.
+# Graphics in pdf or bitmap formats will be linked into a directory pictures.
 # The compiled document will automatically opened with okular if installed.
 # There is also an option to compress the file.
 # Function declarations
@@ -61,13 +61,19 @@ function findUpToDate {
 }
 
 function makeBib {
-    if ([ `grep -c --exclude=*.sh "LaTeX Warning: There were undefined references." $file.${suffix[1]}` -gt 0 ] || [ -e $file.${suffix[2]} ]) ; then
-        bibtex $file.${suffix[4]}
+    if ([ `grep -c --exclude=*.sh "LaTeX Warning: There were undefined references." $file.${suffix[1]}` > 0 ] || [ -e $file.${suffix[2]} ]) ; then
+        if [[ `grep -c --exclude=*.sh "biber" $file.${suffix[0]}`> 0 ]]; then
+            biber $file
+            pdflatex $directory/$file.${suffix[0]}
+        else
+            bibtex $file.${suffix[4]}
+        fi
         pdflatex $directory/$file.${suffix[0]}
-        #pdflatex $directory/$file.${suffix[0]}
     fi
     if ([ `grep -c --exclude=*.sh "LaTeX Warning: Label(s) may have changed." $file.${suffix[1]}` -gt 0 ]); then
+        
         pdflatex $directory/$file.${suffix[0]}
+       
     fi
 }
 
@@ -78,8 +84,8 @@ function makeLineno {
 }
 
 function makePic {
-    targetPath=figures
-    path=figures_src
+    targetPath=pictures
+    path=pictures_src
     if([ -d $path ]); then 
         if([ ! -d $targetPath ]); then
             mkdir $targetPath
@@ -133,7 +139,7 @@ function makePic {
         fi
     done
 
-    echo "Figures updated: $updatedPics"
+    echo "Pictures updated: $updatedPics"
 }
 
 function makeClean {
@@ -143,8 +149,8 @@ function makeClean {
         echo "Remove ${file}.${i}."
         rm  *.${i} 
     done
-    if([ -d figures ]); then
-        rm -r figures
+    if([ -d pictures ]); then
+        rm -r pictures
     fi
     exit
 }
