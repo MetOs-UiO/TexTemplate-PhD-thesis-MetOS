@@ -24,7 +24,12 @@ function findMain {
      fi
     echo "==> $file"
     file=`basename $file .tex `
-    bib_file=`find . -name *.bib`
+    # Find name of bib file used in main document
+    bib_file="`grep -oP '.*\K(?<={)\w+(?=.bib})' $file.${suffix[0]}`.bib"
+    bib_dir=`find . -name ${bib_file} | head -1`
+    if [[ ! -e $bib_file ]]; then
+        ln -s $bib_dir $bib_file
+    fi
 }
 
 function findUpToDate {
@@ -44,8 +49,8 @@ function findUpToDate {
         fi
     done
     
-    if [[ $file.${suffix[2]} -ot $file.${suffix[4]} ]]; then 
-        echo "No changes to $file.${suffix[2]}."
+    if [[ ${bib_file} -ot $file.${suffix[4]} ]]; then 
+        echo "No changes to ${bib_file}."
     else
         changes=$(($changes + 1))
         rm ${file}.${suffix}[4]
@@ -61,19 +66,27 @@ function findUpToDate {
 }
 
 function makeBib {
+    
     if ([ `grep -c --exclude=*.sh "LaTeX Warning: There were undefined references." $file.${suffix[1]}` > 0 ] || [ -e $file.${suffix[2]} ]) ; then
         if [[ `grep -c --exclude=*.sh "biber" $file.${suffix[0]}`> 0 ]]; then
             biber $file
-            pdflatex $directory/$file.${suffix[0]}
         else
             bibtex $file.${suffix[4]}
         fi
+        pdflatex $directory/$file.${suffix[0]}
         pdflatex $directory/$file.${suffix[0]}
     fi
     if ([ `grep -c --exclude=*.sh "LaTeX Warning: Label(s) may have changed." $file.${suffix[1]}` -gt 0 ]); then
         
         pdflatex $directory/$file.${suffix[0]}
        
+    fi
+}
+
+function makeGlossaries {
+    if [[ `grep -c --exclude=*.sh "glossaries" $file.${suffix[0]}`> 0 ]]; then
+            makeglossaries $file
+            pdflatex $directory/$file.${suffix[0]}
     fi
 }
 
@@ -249,16 +262,19 @@ function makeReview {
 
 suffix=( tex log bib pdf aux )
 pic_suff=( pdf jpg jpeg png bmp tiff pnm )
-clear_suff=( aux bbl blg out log pdf toc )
+clear_suff=( acn acr alg aux bbl bcf blg glg glo gls glsdefs ist run.xml out log toc )
 directory=`pwd`
 options=( "open" "clean" "check" "pic" "compress" "copy" "review")
 
+# in any case
+findMain
+
 case ${1} in
     "")
-        findMain
         makePic
         findUpToDate $updatedPics
         pdflatex -halt-on-error $directory/$file.${suffix[0]}
+        makeGlossaries
         makeBib
         makeLineno
         getWarnings
